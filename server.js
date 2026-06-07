@@ -368,13 +368,17 @@ app.delete('/api/contacts/:id', async (req, res) => {
   }
 });
 
-// Start listening
-app.listen(PORT, () => {
-  console.log(`===============================================`);
-  console.log(`BytHawk Backend running on port ${PORT}`);
-  console.log(`Serving models from: ${MODELS_DIR}`);
-  console.log(`Serving branding from: ${BRANDING_DIR}`);
-  console.log(`Serving animations from: ${ANIMATIONS_DIR}`);
-  console.log(`Serving logo from: ${LOGO_PATH}`);
-  console.log(`===============================================`);
-});
+// Start listening (only locally, Vercel uses module.exports)
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`===============================================`);
+    console.log(`BytHawk Backend running on port ${PORT}`);
+    console.log(`Serving models from: ${MODELS_DIR}`);
+    console.log(`Serving branding from: ${BRANDING_DIR}`);
+    console.log(`Serving animations from: ${ANIMATIONS_DIR}`);
+    console.log(`Serving logo from: ${LOGO_PATH}`);
+    console.log(`===============================================`);
+  });
+}
+
+module.exports = app;
