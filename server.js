@@ -222,7 +222,7 @@ app.post('/api/orders', async (req, res) => {
       createdAt: new Date()
     };
 
-    if (dbConnected) {
+    if (process.env.MONGODB_URI) {
       const newOrder = new Order(orderData);
       await newOrder.save();
       res.status(201).json({ success: true, message: 'Order request submitted successfully (MongoDB)', data: newOrder });
@@ -240,7 +240,7 @@ app.post('/api/orders', async (req, res) => {
 
 app.get('/api/orders', async (req, res) => {
   try {
-    if (dbConnected) {
+    if (process.env.MONGODB_URI) {
       const orders = await Order.find().sort({ createdAt: -1 });
       res.json({ success: true, data: orders });
     } else {
@@ -259,7 +259,7 @@ app.put('/api/orders/:id', async (req, res) => {
     const { status } = req.body;
     const { id } = req.params;
 
-    if (dbConnected) {
+    if (process.env.MONGODB_URI) {
       const updated = await Order.findByIdAndUpdate(id, { status }, { new: true });
       if (!updated) return res.status(404).json({ success: false, message: 'Order not found' });
       res.json({ success: true, message: 'Order status updated', data: updated });
@@ -279,7 +279,7 @@ app.put('/api/orders/:id', async (req, res) => {
 app.delete('/api/orders/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    if (dbConnected) {
+    if (process.env.MONGODB_URI) {
       await Order.findByIdAndDelete(id);
       res.json({ success: true, message: 'Order deleted successfully' });
     } else {
@@ -313,7 +313,7 @@ app.post('/api/contacts', async (req, res) => {
       createdAt: new Date()
     };
 
-    if (dbConnected) {
+    if (process.env.MONGODB_URI) {
       const newContact = new Contact(contactData);
       await newContact.save();
       res.status(201).json({ success: true, message: 'Message submitted successfully (MongoDB)', data: newContact });
@@ -331,7 +331,7 @@ app.post('/api/contacts', async (req, res) => {
 
 app.get('/api/contacts', async (req, res) => {
   try {
-    if (dbConnected) {
+    if (process.env.MONGODB_URI) {
       const contacts = await Contact.find().sort({ createdAt: -1 });
       res.json({ success: true, data: contacts });
     } else {
@@ -349,7 +349,7 @@ app.put('/api/contacts/:id', async (req, res) => {
     const { reviewed } = req.body;
     const { id } = req.params;
 
-    if (dbConnected) {
+    if (process.env.MONGODB_URI) {
       const updated = await Contact.findByIdAndUpdate(id, { reviewed }, { new: true });
       if (!updated) return res.status(404).json({ success: false, message: 'Message not found' });
       res.json({ success: true, message: 'Message review state updated', data: updated });
@@ -369,7 +369,7 @@ app.put('/api/contacts/:id', async (req, res) => {
 app.delete('/api/contacts/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    if (dbConnected) {
+    if (process.env.MONGODB_URI) {
       await Contact.findByIdAndDelete(id);
       res.json({ success: true, message: 'Message deleted successfully' });
     } else {
