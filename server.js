@@ -184,7 +184,22 @@ app.get('/api/portfolio', async (req, res) => {
   }
 });
 
-// 2. Custom Quote / Orders API
+// 2. Custom Quote // --- Auth API ---
+app.post('/api/auth/login', (req, res) => {
+  const { username, password } = req.body;
+  const adminUser = process.env.ADMIN_USER || 'admin';
+  const adminPass = process.env.ADMIN_PASS || 'BytHawk2026!';
+
+  if (username === adminUser && password === adminPass) {
+    // For a simple setup, we just return success without full JWT.
+    // The frontend can store a session flag.
+    res.json({ success: true, message: 'Login successful' });
+  } else {
+    res.status(401).json({ success: false, message: 'Invalid credentials' });
+  }
+});
+
+// --- Orders API ---
 app.post('/api/orders', async (req, res) => {
   try {
     const { clientName, discord, email, references, description, vtuberPackage, brandingPackage, selectedAddons, totalPrice } = req.body;
